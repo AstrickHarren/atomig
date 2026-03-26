@@ -1,6 +1,7 @@
 use crate::Atom;
 use chrono::TimeDelta;
 
+#[derive(Debug, Clone, Copy)]
 pub struct Micros<T>(pub T);
 
 impl Atom for Option<Micros<TimeDelta>> {
@@ -25,5 +26,11 @@ impl Atom for Micros<TimeDelta> {
 
     fn unpack(src: Self::Repr) -> Self {
         Micros(TimeDelta::microseconds(src))
+    }
+}
+
+impl<T> From<T> for Micros<T> {
+    fn from(value: T) -> Self {
+        Micros(value)
     }
 }
