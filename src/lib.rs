@@ -79,8 +79,8 @@
 #[macro_use]
 extern crate std;
 
+use crate::impls::{PrimitiveAtom, PrimitiveAtomInteger, PrimitiveAtomLogic};
 use core::fmt;
-use crate::impls::{PrimitiveAtom, PrimitiveAtomLogic, PrimitiveAtomInteger};
 
 pub mod impls;
 #[cfg(test)]
@@ -251,7 +251,8 @@ pub trait Atom {
 pub trait AtomLogic: Atom
 where
     Self::Repr: PrimitiveAtomLogic,
-{}
+{
+}
 
 /// `Atom`s for which integer operations on their atomic representation make
 /// sense.
@@ -291,9 +292,8 @@ where
 pub trait AtomInteger: Atom
 where
     Self::Repr: PrimitiveAtomInteger,
-{}
-
-
+{
+}
 
 // ===============================================================================================
 // ===== The `Atomic<T>` type
@@ -565,7 +565,7 @@ impl<T: Atom> Atomic<T> {
         mut f: F,
     ) -> Result<T, T>
     where
-        F: FnMut(T) -> Option<T>
+        F: FnMut(T) -> Option<T>,
     {
         let f = |repr| f(T::unpack(repr)).map(Atom::pack);
         T::Repr::fetch_update(&self.0, set_order, fetch_order, f)
@@ -680,7 +680,6 @@ where
         T::unpack(T::Repr::fetch_xor(&self.0, val.pack(), order))
     }
 }
-
 
 // TODO: the `where` bound should not be necessary as the `AtomInteger` trait
 // already specifies this. Maybe we can fix this in the future.
@@ -836,7 +835,6 @@ impl<T: Atom + serde::Serialize> serde::Serialize for Atomic<T> {
         self.load(Ordering::SeqCst).serialize(serializer)
     }
 }
-
 
 #[cfg(feature = "serde")]
 impl<'de, T: Atom + serde::Deserialize<'de>> serde::Deserialize<'de> for Atomic<T> {
