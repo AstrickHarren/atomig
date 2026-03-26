@@ -18,6 +18,7 @@ categories = ["concurrency", "hardware-support", "no-std"]
 
 
 [features]
+default = ["chrono"]
 derive = ["atomig-macro"]
 chrono = ["dep:chrono"]
 

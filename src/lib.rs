@@ -845,3 +845,21 @@ impl<'de, T: Atom + serde::Deserialize<'de>> serde::Deserialize<'de> for Atomic<
         serde::Deserialize::deserialize(deserializer).map(Self::new)
     }
 }
+
+pub trait AtomOption: Sized {
+    type Repr: PrimitiveAtom;
+    fn pack(this: Option<Self>) -> Self::Repr;
+    fn unpack(src: Self::Repr) -> Option<Self>;
+}
+
+impl<T: AtomOption> Atom for Option<T> {
+    type Repr = T::Repr;
+
+    fn pack(self) -> Self::Repr {
+        T::pack(self)
+    }
+
+    fn unpack(src: Self::Repr) -> Self {
+        T::unpack(src)
+    }
+}
