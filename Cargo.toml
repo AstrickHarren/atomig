@@ -19,9 +19,11 @@ categories = ["concurrency", "hardware-support", "no-std"]
 
 [features]
 derive = ["atomig-macro"]
+chrono = ["dep:chrono"]
 
 [dependencies]
 atomig-macro = { version = "=0.4.0", path = "atomig-macro", optional = true }
+chrono = { version = "0.4.44", default-features = false, optional = true }
 serde = { version = "1", default-features = false, optional = true }
 
 [dev-dependencies]

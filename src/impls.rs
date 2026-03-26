@@ -3,7 +3,8 @@
 //! Most items of these traits are hidden and not part of the public API of this library.
 //! You cannot implement these traits yourself.
 
-mod chrono;
+#[cfg(feature = "chrono")]
+pub mod chrono;
 
 use super::{Atom, AtomInteger, AtomLogic};
 use core::{
